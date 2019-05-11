@@ -1,5 +1,8 @@
 import React from 'react'
 
-export default () => {
-  return <div>Settings</div>
+export default (props) => {
+  return (<div>Settings
+  <div>Username:{props.userName}</div>
+  </div>
+  )
 }
