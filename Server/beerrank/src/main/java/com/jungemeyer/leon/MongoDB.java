@@ -22,21 +22,6 @@ public abstract class MongoDB {
         userRepository.save(user);
     }
 
-    /**
-     * Saves the game and all of it's Attributes recursively
-     *
-     * @param game
-     */
-    public static void saveGameR(Game game) {
-        gameRepository.save(game);
-        for (User user : game.getTeam1()) {
-            saveUser(user);
-        }
-        for (User user : game.getTeam2()) {
-            saveUser(user);
-        }
-    }
-
     public static User loadUser(String username) {
         return userRepository.findByUsername(username);
     }

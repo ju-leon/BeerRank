@@ -123,7 +123,7 @@ public class AndroidServer implements CommandLineRunner {
 
         dbGame.setState(game.getState());
 
-        MongoDB.saveGameR(dbGame);
+        MongoDB.saveGame(dbGame);
 
         return dbGame;
     }
@@ -145,7 +145,7 @@ public class AndroidServer implements CommandLineRunner {
             throw new FalseInputException("GameID does not exist.");
         }
 
-        dbGame.addTeam1(currentUser);
+        dbGame.addTeam1(currentUser.getUsername());
 
         return dbGame;
 
