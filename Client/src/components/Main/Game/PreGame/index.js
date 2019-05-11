@@ -10,7 +10,7 @@ export default ({game}) => {
 
   const screen = tabIndex === 0
     ? <Lobby game={game} />
-    : <Code game={game} />
+    : <Code gameId={game.id} />
 
   const {id, teamA, teamB} = game
   const headerProps = {
