@@ -1,5 +1,6 @@
 import React from 'react';
 import './Header.css';
+import settings-work-tool.svg from '../public/img/settings-work-took.svg';
 
 function Header() {
   return (

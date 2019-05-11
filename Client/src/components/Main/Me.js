@@ -4,7 +4,7 @@ import React from 'react';
 function Me() {
   return (
     <div className="Me">
-      I am the Me View
+      <div></div>
     </div>
   );
 }
