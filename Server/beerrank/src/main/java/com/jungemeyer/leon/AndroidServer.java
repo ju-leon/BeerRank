@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -126,16 +128,27 @@ public class AndroidServer implements CommandLineRunner {
         return dbGame;
     }
 
-    @RequestMapping(value = "/joinUser/{gameID}", method = RequestMethod.PUT)
-    public Game get(@PathVariable String gameID) {
-        //TODO aktuell eingelogten User heraussuchen
-        User currentUser = new User();
+    @GetMapping(value = "/joinGame")
+    public Game get(@RequestParam String gameID) throws FalseInputException {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        User currentUser = userRepository.findByUsername(auth.getPrincipal().toString());
+
+        if (currentUser == null) {
+            System.out.println("Fatal error!");
+        }
 
         Game dbGame = gameRepository.findBy_id(gameID);
+
+        if (dbGame == null) {
+            throw new FalseInputException("GameID does not exist.");
+        }
+
         dbGame.addTeam1(currentUser);
 
         return dbGame;
-        }
+    }
 
 
 

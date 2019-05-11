@@ -3,6 +3,7 @@ package com.jungemeyer.leon.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "games")
@@ -19,6 +20,8 @@ public class Game {
 
 
     public Game(){
+        team1 = new ArrayList<>();
+        team2 = new ArrayList<>();
     }
 
     public Game(List<User> team1, List<User> team2, int result){
