@@ -1,11 +1,11 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Landingpage from './components/Landingpage.js';
+//import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <div></div>
+      <Landingpage/>
     </div>
   );
 }

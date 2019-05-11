@@ -1,8 +1,7 @@
 import React from 'react';
-import logo from './logo.svg';
-import './landingpage.css';
+//import './landingpage.css';
 
-function landingpage() {
+function Landingpage() {
   return (
     <div className="Landingpage">
       <div>
