@@ -74,14 +74,12 @@ public class AndroidServer implements CommandLineRunner {
         userRepository.save(user);
 
         return user;
-
     }
 
     @RequestMapping(value = "/addGame", method = RequestMethod.POST)
     public Game createGame(@RequestBody Game game) throws EntryDoesNotExistException {
+        if(gameRepository.findBy_id(game.get_id()) != null){
 
-        if (game.getTeam1() == null || game.getTeam2() == null) {
-            throw new EntryDoesNotExistException("Teams cannot be empty");
         }
 
         gameRepository.save(game);
@@ -99,6 +97,13 @@ public class AndroidServer implements CommandLineRunner {
         return dbGame;
     }
 
+    /**
+     * berechnet neue elo werte nach einem Spiel
+     * @param game  Game Objekt, das den Ausgang des Spiels enthält, also result != 0.
+     * @return
+     * @throws FinishedGameException
+     * @throws FalseInputException
+     */
     @RequestMapping(value = "/setResult", method = RequestMethod.PUT)
     public Game setResult(@RequestBody Game game) throws FinishedGameException, FalseInputException{
         Game dbGame = gameRepository.findBy_id(game.get_id());
@@ -121,6 +126,16 @@ public class AndroidServer implements CommandLineRunner {
         return dbGame;
     }
 
+    @RequestMapping(value = "/joinUser/{gameID}", method = RequestMethod.PUT)
+    public Game get(@PathVariable String gameID) {
+        //TODO aktuell eingelogten User heraussuchen
+        User currentUser = new User();
+
+        Game dbGame = gameRepository.findBy_id(gameID);
+        dbGame.addTeam1(currentUser);
+
+        return dbGame;
+        }
 
 
 
