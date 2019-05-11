@@ -1,0 +1,5 @@
+
+Server/beerrank/\.idea/
+
+Server/beerrank/target/
+*.jar
