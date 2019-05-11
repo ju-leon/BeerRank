@@ -1,0 +1,18 @@
+.Code {
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+    align-items: center;
+}
+
+.Code .Qrcode {
+    padding: 30px;
+}
+
+.Code .Text {
+    padding: 5px;
+}
+
+.Important {
+    font-size: 1.5rem;
+}
