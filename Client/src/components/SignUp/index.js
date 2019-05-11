@@ -1,5 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
+import { Link } from 'react-router-dom'
 
 import './SignUp.sass'
 
@@ -24,7 +25,11 @@ let SignUp = ({handleSubmit}) => {
           <Field name="password" component="input" type="password" />
         </div>
 
-        <button className="button primary">Create</button>
+        <div className="submit-container">
+          <button className="button primary">Create</button>
+        </div>
+
+        <Link className="signup-link" to="/login">Already have an account?</Link>
       </form>
     </div>
   )

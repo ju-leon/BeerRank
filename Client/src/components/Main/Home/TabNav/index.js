@@ -7,8 +7,8 @@ import './TabNav.sass'
 export default ({activeTab, tabClickHandler}) => {
   return (
     <div className="TabNav">
-      <Tab isActive={activeTab === 0} onClick={() => tabClickHandler(0)}>Play</Tab>
-      <Tab isActive={activeTab === 1} onClick={() => tabClickHandler(1)}>Me</Tab>
+      <Tab isActive={activeTab === 0} onClick={() => tabClickHandler(0)}><h2>Play</h2></Tab>
+      <Tab isActive={activeTab === 1} onClick={() => tabClickHandler(1)}><h2>Me</h2></Tab>
     </div>
   )
 }

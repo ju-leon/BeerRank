@@ -2,7 +2,11 @@
   --color-primary: #e74859;
   --color-secondary: #FFF;
   --shadow-default: 0 3px 3px rgba(0,0,0,0.2)
-  
+}
+
+::selection {
+  background: hsl(354, 77%, 60%) !important;
+  color: #EEE !important;
 }
 
 body {
@@ -27,11 +31,21 @@ body {
 button {
   background: #AAA;
   height: 48px;
+  min-width: 100px;
   border-radius: 7px;
   padding: 10px;
   color: #FFF;
   border: none;
   cursor: pointer;
+  box-shadow: 0 2px 2px rgba(0,0,0,0.3);
+  transition: all 200ms;
+  outline: none !important;
+  font-weight: bold;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 5px rgba(0,0,0,0.3);
 }
 
 button.primary {
@@ -44,11 +58,13 @@ button.secondary {
 }
 
 button.ghost {
-  background: rgba(0,0,0,0);
+  color: #333;
+  background: #EEE;
   border: 1px solid #AAA;
 }
 
 button.ghost.primary {
+  color: var(--color-primary);
   border-color: var(--color-primary);
 }
 
@@ -59,8 +75,28 @@ button.ghost.secondary {
 input {
   height: 48px;
   padding: 10px;
-  background: #555;
+  background: #555 !important;
+  color: #EEE !important;
   border: 1px solid #222;
-  border-radius: 7px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 7px !important;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2) !important;
+  transition: all 200ms !important;
+  
+}
+
+input:hover {
+  background: #666 !important;
+  box-shadow: 0 5px 5px rgba(0,0,0,0.3) !important;
+  transform: translateY(-2px);
+}
+
+input:focus {
+  background: #777 !important;
+  box-shadow: 0 7px 7px rgba(0,0,0,0.3) !important;
+  border: none !important;
+  transform: translateY(-2px);
+}
+
+a {
+  color: #eee !important
 }
