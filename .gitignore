@@ -2,3 +2,9 @@
 Server/beerrank/\.idea/
 
 Server/beerrank/target/
+Server/beerrank/\.mvn/
+Server/beerrank/lib/
+Server/beerrank/*.iml
+Server/beerrank/*.iws
+
+
