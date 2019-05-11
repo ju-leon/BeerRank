@@ -72,6 +72,17 @@ public class AndroidServer implements CommandLineRunner {
         return game;
     }
 
+    @RequestMapping(value = "updateGameState", method = RequestMethod.PUT)
+    public Game updateGameState(@RequestBody Game game) {
+        Game dbGame = gameRepository.findBy_id(game.get_id());
+
+        dbGame.setState(game.getState());
+
+        gameRepository.save(dbGame);
+
+        return dbGame;
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(AndroidServer.class, args);
     }
