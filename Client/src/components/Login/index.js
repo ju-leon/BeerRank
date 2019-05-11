@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 export default () => {
   const [input, setInput] = useState('')
@@ -20,7 +20,7 @@ export default () => {
 
         <div>
           <label>Password</label>
-          <input type="password" value={pw} onChange={} placeholder=""/>
+          <input type="password" value={pw} placeholder=""/>
         </div>
       </form>
     </div>
