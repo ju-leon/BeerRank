@@ -14,6 +14,7 @@ export default (props) => {
       </div>
     <div>Settings</div>
     <div>Username:{props.userName}</div>
+    <i class="edit icon"></i>
   </div>
   )
 }

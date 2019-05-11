@@ -1,12 +1,15 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 import { Link } from 'react-router-dom'
+import Logo from 'components/Main/Home/Header/Logo'
+
 
 import './SignUp.sass'
 
 let SignUp = ({handleSubmit}) => {
   return (
     <div className="SignUp ui container">
+      <Logo/>
       <h1>Create Account</h1>
 
       <form className="ui form" onSubmit={handleSubmit}>
