@@ -10,14 +10,14 @@ import './Game.sass'
 const gameMockup = {
   id: "123456",
   teamA: [
-    {userName: "Gnarlex"},
-    {userName: "Gnarlex"},    
+    {userName: "Gnarlex", rank: 1023},
+    {userName: "Gnarlex", rank:  997},    
   ],
   teamB: [
-    {userName: "Gnarlex"},
-    {userName: "Gnarlex"},
+    {userName: "Gnarlex", rank: 1120},
+    {userName: "Gnarlex", rank:  870},
   ],
-  state: PRE_GAME,
+  state: IN_GAME,
 }
 
 export default ({game = gameMockup}) => {
