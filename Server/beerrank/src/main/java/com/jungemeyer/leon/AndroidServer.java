@@ -1,6 +1,8 @@
 package com.jungemeyer.leon;
 
-import com.jungemeyer.leon.database.*;
+import com.jungemeyer.leon.database.GameRepository;
+import com.jungemeyer.leon.database.UserRepository;
+import com.jungemeyer.leon.model.Game;
 import com.jungemeyer.leon.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -15,6 +17,8 @@ public class AndroidServer implements CommandLineRunner {
     @Autowired
     public UserRepository userRepository;
 
+    @Autowired
+    public GameRepository gameRepository;
 
     @GetMapping("/")
     String home() {
@@ -57,6 +61,16 @@ public class AndroidServer implements CommandLineRunner {
 
     }
 
+    @RequestMapping(value = "/addGame", method = RequestMethod.POST)
+    public Game createGame(@RequestBody Game game) throws EntryDoesNotExistException {
+
+        if (game.getTeam1() == null || game.getTeam2() == null) {
+            throw new EntryDoesNotExistException("Teams cannot be empty");
+        }
+
+        gameRepository.save(game);
+        return game;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(AndroidServer.class, args);
