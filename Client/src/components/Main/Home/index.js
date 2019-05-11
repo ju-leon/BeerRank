@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 
+import Header from './Header';
 import TabNav from './TabNav'
 import Play from './Play'
 import Me from './Me'
@@ -13,6 +14,7 @@ export default () => {
 
   return (
     <div>
+      <Header/>
       <TabNav activeTab={tabIndex} tabClickHandler={setTabIndex} />
       <div className="ui container">
         {content}
