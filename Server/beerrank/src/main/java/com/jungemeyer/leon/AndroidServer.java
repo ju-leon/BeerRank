@@ -148,6 +148,8 @@ public class AndroidServer implements CommandLineRunner {
         dbGame.addTeam1(currentUser);
 
         return dbGame;
+
+        // TODO: Link to frontend Lobby
     }
 
 
