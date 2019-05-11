@@ -1,0 +1,21 @@
+.Join .Header {
+    height: 75px;
+    padding: 10px;
+    border-bottom: 1px solid #3d3d3d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.Join.Wrapper {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.Wrapper .Text {
+    font-size: 1rem;
+    padding: 20px;
+    width: fit-content;
+}
