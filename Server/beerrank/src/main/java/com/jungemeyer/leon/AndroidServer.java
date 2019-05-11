@@ -31,11 +31,30 @@ public class AndroidServer implements CommandLineRunner {
      * @param user
      * @return
      */
-    @RequestMapping(value = "/loadUser", method = RequestMethod.POST)
-    public User loadUser(@RequestBody User user)  {
+    @RequestMapping(value = "/getUser", method = RequestMethod.GET)
+    public User loadUser(@RequestBody User user) throws EntryDoesNotExistException {
+        if (user.getUsername() == null) {
+            throw new EntryDoesNotExistException("No username specified");
+        }
+
         User returnUser = null;
-        returnUser =  userRepository.findByFirstName(user.getFirstName());
+        returnUser =  userRepository.findByUsername(user.getUsername());
+
+        if (returnUser == null) {
+            throw new EntryDoesNotExistException("User does not exist");
+        }
+
         return returnUser;
+
+    }
+
+    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
+    public User createUser(@RequestBody User user) {
+
+        userRepository.save(user);
+
+        return user;
+
     }
 
 
