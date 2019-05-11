@@ -6,8 +6,8 @@ function Landingpage() {
     <div className="Landingpage">
       <div>
           <div>Ready for some Beerpong?</div>
-          <button>LogIn</button>
-          <button>SignUp</button>
+          <button className="ghost primary">LogIn</button>
+          <button className="primary">SignUp</button>
       </div>
     </div>
   );
