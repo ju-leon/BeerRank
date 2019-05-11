@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import QrReader from 'react-qr-reader'
+import { Link } from 'react-router-dom'
+
 import './index.css'
 
 export default () => {
@@ -16,7 +18,13 @@ export default () => {
   return (
 
     <div className="Join">
-      <div className="Header"></div>
+      <div className="Header">
+        <div className="back">
+          <Link to="/home">
+            <i className="angle left big icon"></i>
+          </Link>
+        </div>
+      </div>
       <div className="Wrapper">
         <div className="Text">Scan the QR Code from a team member!</div>
         <QrReader
@@ -27,11 +35,11 @@ export default () => {
         />
         {/* <p>{result}</p> */}
         <div className="Text">Doesn't work? Enter the game id:</div>
-        <div className="ui mini action right labeled input">
-          <input type="text" placeholder="Game Id..."/>
-            <button className="ui icon button">
-              <i className="search icon"></i>
-            </button>
+        <div className="ui small action right labeled input">
+          <input type="text" placeholder="Game Id..." name={gameId}/>
+          <button className="ui icon button">
+            <i className="search icon"></i> 
+          </button>
           </div>
         </div>
     </div>
