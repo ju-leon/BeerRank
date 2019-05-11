@@ -2,6 +2,7 @@
   --color-primary: #e74859;
   --color-secondary: #FFF;
   --shadow-default: 0 3px 3px rgba(0,0,0,0.2)
+  
 }
 
 body {
@@ -27,6 +28,7 @@ button {
   background: #AAA;
   height: 48px;
   border-radius: 7px;
+  padding: 10px;
   color: #FFF;
   border: none;
   cursor: pointer;
@@ -53,8 +55,6 @@ button.ghost.primary {
 button.ghost.secondary {
   border-color: var(--color-secondary);
 }
-
-
 
 input {
   height: 48px;

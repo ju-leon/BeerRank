@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 
 let Login = ({ handleSubmit }) => {
@@ -6,7 +6,7 @@ let Login = ({ handleSubmit }) => {
     <div>
       <h1>Login</h1>
       
-      <form onSubmit={handleSubmit}>
+      <form className="ui form" onSubmit={handleSubmit}>
         <div>
           <label>Username</label>
           <Field name="input" component="input" type="text" />

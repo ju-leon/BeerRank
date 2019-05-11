@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-do
 
 import Main from 'components/Main'
 import Login from 'components/Login'
-import Register from 'components/Register'
+import SignUp from 'components/SignUp'
 import Landingpage from 'components/Landingpage'
 
 let App = ({loggedIn}) => {
@@ -15,7 +15,7 @@ let App = ({loggedIn}) => {
         <Switch>
           <Route path="/" exact component={Landingpage} />
           <Route path="/login" exact component={Login} />
-          <Route path="/register" exact component={Register} />
+          <Route path="/signup" exact component={SignUp} />
           <Redirect to="/" />
         </Switch>
       </Router>
