@@ -10,3 +10,5 @@ Server/beerrank/*.iws
 
 
 BeerRank Server/\.idea/
+
+BeerRank Server/lib/
