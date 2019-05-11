@@ -1,3 +1,8 @@
+:root {
+  --color-primary: #e74859;
+  --color-secondary: #FFF;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -5,9 +10,45 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
+  background-color: #444;
+  color: #FAFAFA;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+button {
+  background: #AAA;
+  height: 48px;
+  border-radius: 7px;
+  color: #FFF;
+}
+
+button.ghost {
+  background: rgba(0,0,0,0);
+  border: 1px solid #AAA;
+  color: #333;
+}
+
+button.ghost.primary {
+  border-color: var(--color-primary);
+}
+
+button.ghost.secondary {
+  border-color: var(--color-secondary);
+}
+
+button.primary {
+  background: var(--color-primary);
+}
+
+button.secondary {
+  background: var(--color-secondary);
+  color: #333;
+}
+
+input {
+  height: 48px;
+  background: #FFF;
+  border: 1px solid #EEE;
+  border-radius: 7px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
