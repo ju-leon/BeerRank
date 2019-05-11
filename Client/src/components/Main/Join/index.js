@@ -4,19 +4,25 @@ import { Link } from 'react-router-dom'
 
 import './index.css'
 
-export default () => {
-  const [result, setResult] = useState('No result')
+export default (props) => {
+  const [gameId, setGameId] = useState('')
+  const [result, setResult] = useState('')
+
+  const handleChange = e => setGameId(e.target.value)
 
   const handleScan = data => {
     if (data)
-      setResult(data)
-      //TODO: now navigate to PreGame View with given link
+      console.log(data)
   }
 
   const handleError = err => console.log(err)
 
-  return (
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    props.history.push('/game/' + gameId)
+  }
 
+  return (
     <div className="Join">
       <div className="Header">
         <div className="back">
@@ -25,6 +31,7 @@ export default () => {
           </Link>
         </div>
       </div>
+
       <div className="Wrapper">
         <div className="Text">Scan the QR Code from a team member!</div>
         <QrReader
@@ -33,15 +40,14 @@ export default () => {
           onScan={handleScan}
           style={{ width: '100%' }}
         />
-        {/* <p>{result}</p> */}
-        <div className="Text">Doesn't work? Enter the game id:</div>
-        <div className="ui small action right labeled input">
-          <input type="text" placeholder="Game Id..."/>
+        <div className="Text">...or enter the lobby id:</div>
+        <form className="ui small action right labeled input" onSubmit={handleSubmit}>
+          <input type="text" placeholder="123456" value={gameId} onChange={handleChange}/>
           <button className="ui icon button">
             <i className="search icon"></i> 
           </button>
-          </div>
-        </div>
+        </form>
+      </div>
     </div>
   )
 }
