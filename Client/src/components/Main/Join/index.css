@@ -7,7 +7,7 @@
     align-items: center;
 }
 
-.Join.Wrapper {
+.Join .Wrapper {
     display: flex;
     flex-flow: column;
     align-items: center;
@@ -16,6 +16,6 @@
 
 .Wrapper .Text {
     font-size: 1rem;
-    padding: 20px;
+    padding: 10px;
     width: fit-content;
 }

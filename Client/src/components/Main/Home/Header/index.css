@@ -6,8 +6,19 @@
     border-bottom: 1px solid #3d3d3d;
 }
 
-.Placeholder {
+.rank-container {
     height: 28px;
     width: 28px;
+    text-align: center;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    padding-left: 20px;
+}
+
+.rank-container .value {
+    font-weight: bold;
+    font-size: 1.5em
 }
 
