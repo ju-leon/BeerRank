@@ -1,0 +1,15 @@
+.Settings {
+    height: 100vh;
+}
+
+.wrapper {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    height: 100%;
+}
+
+.inLine {
+    display: flex;
+    flex-flow: row;
+}
