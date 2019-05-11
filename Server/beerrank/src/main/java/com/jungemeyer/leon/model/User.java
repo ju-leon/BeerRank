@@ -23,6 +23,14 @@ public class User {
 
     private int score;
 
+    public User(){
+
+    }
+
+    public User(int score){
+        this.score = score;
+    }
+
     public String getUsername() {
         return username;
     }
