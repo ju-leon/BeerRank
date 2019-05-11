@@ -4,7 +4,7 @@ import React from 'react';
 function Me() {
   return (
     <div className="Me">
-      <div></div>
+      Me
     </div>
   );
 }

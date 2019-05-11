@@ -1,28 +1,30 @@
 import React, {useState} from 'react'
+import { Field, reduxForm } from 'redux-form'
 
-export default () => {
-  const [input, setInput] = useState('')
-  const [pw, setPw] = useState('')
-
-  const handleSubmit = event => {
-    event.preventDefault()
-  }
-
+let Login = ({ handleSubmit }) => {
   return (
     <div>
       <h1>Login</h1>
       
       <form onSubmit={handleSubmit}>
         <div>
-          <label>User or Email</label>
-          <input type="email" value={input} placeholder=""/>
+          <label>Username</label>
+          <Field name="input" component="input" type="text" />
         </div>
 
         <div>
           <label>Password</label>
-          <input type="password" value={pw} placeholder=""/>
+          <Field name="pw" component="input" type="password" />
         </div>
+
+        <button className="primary">Login</button>
       </form>
     </div>
   )
 }
+
+Login = reduxForm({
+  form: 'login',
+})(Login)
+
+export default Login
