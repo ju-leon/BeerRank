@@ -14,9 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableConfigurationProperties
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
     @Autowired
-    MongoUserDetailsService userDetailsService;
+    MongoUserDetailService userDetailsService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -25,6 +24,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().anyRequest().authenticated()
                 .and().httpBasic()
                 .and().sessionManagement().disable();
+
+
     }
 
     @Bean
@@ -33,14 +34,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(AuthenticationManagerBuilder builder) throws Exception {
-        builder.userDetailsService(userDetailsService);
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/createUser");
+        web.ignoring().antMatchers("/");
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/addUser");
-
+    public void configure(AuthenticationManagerBuilder builder) throws Exception {
+        builder.userDetailsService(userDetailsService);
     }
-
 }

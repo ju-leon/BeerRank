@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -65,8 +66,11 @@ public class AndroidServer implements CommandLineRunner {
         if(MongoDB.loadUser(user.getUsername()) != null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return null;
-
         }
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        user.setPassword(encoder.encode(user.getPassword()));
+
         userRepository.save(user);
 
         return user;
