@@ -9,7 +9,7 @@ import './Main.sass'
 
 export default () => {
   return (
-    <div className="Main ui container">
+    <div className="Main">
       <Router>
         <Switch>
           <Route path="/game" component={Game} />

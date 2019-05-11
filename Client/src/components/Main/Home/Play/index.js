@@ -1,12 +1,14 @@
 import React from 'react'
 
-import CreateCard from './CreateCard'
+import CreationCard from './CreationCard'
 import JoinCard from './JoinCard'
+
+import './Play.sass'
 
 export default () => {
   return (
-    <div>
-      <CreateCard />
+    <div className="Play">
+      <CreationCard />
       <JoinCard />
     </div>
   )
