@@ -12,3 +12,5 @@ Server/beerrank/*.iws
 BeerRank Server/\.idea/
 
 Backend/demo\.iml
+
+Backend/\.idea/

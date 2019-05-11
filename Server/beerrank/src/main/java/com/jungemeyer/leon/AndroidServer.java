@@ -1,8 +1,12 @@
 package com.jungemeyer.leon;
 
+import com.jungemeyer.leon.Exceptions.EntryDoesNotExistException;
+import com.jungemeyer.leon.Exceptions.FalseInputException;
+import com.jungemeyer.leon.Exceptions.FinishedGameException;
 import com.jungemeyer.leon.database.GameRepository;
 import com.jungemeyer.leon.database.UserRepository;
 import com.jungemeyer.leon.model.Game;
+import com.jungemeyer.leon.model.GameState;
 import com.jungemeyer.leon.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -15,10 +19,10 @@ import org.springframework.web.bind.annotation.*;
 public class AndroidServer implements CommandLineRunner {
 
     @Autowired
-    public UserRepository userRepository;
+    private static UserRepository userRepository;
 
     @Autowired
-    public GameRepository gameRepository;
+    private static GameRepository gameRepository;
 
     @GetMapping("/")
     String home() {
@@ -83,9 +87,34 @@ public class AndroidServer implements CommandLineRunner {
         return dbGame;
     }
 
+    @RequestMapping(value = "/setResult", method = RequestMethod.PUT)
+    public Game setResult(@RequestBody Game game) throws FinishedGameException, FalseInputException{
+        Game dbGame = gameRepository.findBy_id(game.get_id());
+
+        if(GameState.FINISHED.equals(dbGame.getState())) {
+            throw new FinishedGameException("Game is already finished");
+        }
+        dbGame.setState(GameState.FINISHED);
+
+        if(dbGame.getResult() == 0){
+            throw new FalseInputException("Es gibt kein Untentschieden. Result darf nicht 0 sein");
+        }
+
+        dbGame.calculateScore();
+
+        dbGame.setState(game.getState());
+
+        MongoDB.saveGameR(dbGame);
+
+        return dbGame;
+    }
+
+
+
 
     public static void main(String[] args) {
         SpringApplication.run(AndroidServer.class, args);
+        MongoDB.init(userRepository, gameRepository);
     }
 
     @Override
