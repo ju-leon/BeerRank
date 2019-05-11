@@ -46,12 +46,32 @@ public class Game {
 
 
     public void calculateScore(){
+        //konstante für die Eloberechnung
+        int k = 25 + 3*Math.abs(result);
+        //teamelo von team1 und team2
+        double elo1 = averageElo(team1);
+        double elo2 = averageElo(team2);
+        //erwartungswert dass team1 gewinnt
+        double e = 1 / (1 + Math.pow(10, (elo2 - elo1)/400.0));
+        //winner looser variable
+        int s = result > 0? 1 : 0;
+        double delta = (s-e);
+
         for(User user: team1){
-            user.setScore(user.getScore() + result);
+            user.setScore(user.getScore() + (int)(delta * k));
         }
         for(User user: team2){
-            user.setScore(user.getScore() - result);
+            user.setScore(user.getScore() - (int)(delta * k));
         }
+    }
+
+    private double averageElo(List<User> team){
+        double sum = 0, n=0;
+        for(User user: team) {
+            sum += user.getScore();
+            n++;
+        }
+        return sum / n;
     }
 
 
