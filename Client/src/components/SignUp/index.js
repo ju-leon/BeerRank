@@ -9,9 +9,7 @@ import './SignUp.sass'
 let SignUp = ({handleSubmit}) => {
   return (
     <div className="SignUp ui container">
-      <div className="header">
-        <Logo/>
-      </div>
+      <Logo/>
       <h1>Create Account</h1>
 
       <form className="ui form" onSubmit={handleSubmit}>
