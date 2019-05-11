@@ -23,7 +23,8 @@ let App = ({loggedIn}) => {
 }
 
 const mapStateToProps = ({user}) => {
-  return {loggedIn: true /*user.loggedIn*/ }
+  return {loggedIn: false
+     /*user.loggedIn*/ }
 }
 
 App = connect(

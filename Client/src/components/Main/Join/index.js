@@ -36,7 +36,7 @@ export default () => {
         {/* <p>{result}</p> */}
         <div className="Text">Doesn't work? Enter the game id:</div>
         <div className="ui small action right labeled input">
-          <input type="text" placeholder="Game Id..." name={gameId}/>
+          <input type="text" placeholder="Game Id..."/>
           <button className="ui icon button">
             <i className="search icon"></i> 
           </button>

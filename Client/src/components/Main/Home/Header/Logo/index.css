@@ -9,6 +9,10 @@
 }
 
 
+.LogoName.First {
+    margin-left: 0px;
+}
+
 .LogoName.Second {
     margin-left: 50px;
     line-height: 1px;
