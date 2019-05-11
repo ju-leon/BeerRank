@@ -14,15 +14,17 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+
 @SpringBootApplication
 @RestController
 public class AndroidServer implements CommandLineRunner {
 
     @Autowired
-    private static UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private static GameRepository gameRepository;
+    private GameRepository gameRepository;
 
     @GetMapping("/")
     String home() {
@@ -56,9 +58,15 @@ public class AndroidServer implements CommandLineRunner {
 
     }
 
-    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
-    public User createUser(@RequestBody User user) {
 
+    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
+    public User createUser(@RequestBody User user, HttpServletResponse response) throws FalseInputException {
+
+        if(MongoDB.loadUser(user.getUsername()) != null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return null;
+
+        }
         userRepository.save(user);
 
         return user;
@@ -114,11 +122,10 @@ public class AndroidServer implements CommandLineRunner {
 
     public static void main(String[] args) {
         SpringApplication.run(AndroidServer.class, args);
-        MongoDB.init(userRepository, gameRepository);
     }
 
     @Override
     public void run(String... args) throws Exception {
-
+        MongoDB.init(userRepository, gameRepository);
     }
 }

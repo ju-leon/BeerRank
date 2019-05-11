@@ -39,10 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/createUser");
-
-        //TODO: REMOVE FROM IGNORED! For testing only
-        web.ignoring().antMatchers("/createBusiness");
+        web.ignoring().antMatchers("/addUser");
 
     }
 
