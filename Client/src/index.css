@@ -10,7 +10,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
+
   background-color: #444;
   color: #FAFAFA;
 }
@@ -20,6 +20,7 @@ button {
   height: 48px;
   border-radius: 7px;
   color: #FFF;
+  border: none;
 }
 
 button.ghost {
