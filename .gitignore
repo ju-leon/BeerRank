@@ -1,0 +1,16 @@
+
+Server/beerrank/\.idea/
+
+Server/beerrank/target/
+Server/beerrank/\.mvn/
+Server/beerrank/lib/
+Server/beerrank/*.iml
+Server/beerrank/*.iws
+
+
+
+BeerRank Server/\.idea/
+
+Backend/demo\.iml
+
+Backend/\.idea/
