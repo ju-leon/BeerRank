@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -131,12 +130,14 @@ public class AndroidServer implements CommandLineRunner {
     @GetMapping(value = "/joinGame")
     public Game get(@RequestParam String gameID) throws FalseInputException {
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        User currentUser = userRepository.findByUsername(auth.getPrincipal().toString());
+        System.out.println("Username: " + ((org.springframework.security.core.userdetails.User) principal).getUsername());
+        User currentUser = (User) userRepository.findByUsername(((org.springframework.security.core.userdetails.User) principal).getUsername());
 
         if (currentUser == null) {
             System.out.println("Fatal error!");
+            throw new FalseInputException("Error");
         }
 
         Game dbGame = gameRepository.findBy_id(gameID);
