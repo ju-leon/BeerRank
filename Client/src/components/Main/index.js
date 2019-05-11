@@ -1,18 +1,23 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 
-import Play from './Play'
-import Me from './Me'
+import Home from './Home'
+import Game from './Game'
+import Settings from './Settings'
+
+import './Main.sass'
 
 export default () => {
   return (
-    <Router>
-      <div>Header</div>
-      <div><span> Play </span><span> Me </span></div>
-      <Switch>
-        <Route path="/play" component={Play} />
-        <Route path="/Me" component={Me} />
-      </Switch>
-    </Router>
+    <div className="Main ui container">
+      <Router>
+        <Switch>
+          <Route path="/game" component={Game} />
+          <Route path="/home" component={Home} />
+          <Route path="/settings" component={Settings} />
+          <Redirect to="/home" />
+        </Switch>
+      </Router>
+    </div>
   )
 } 
