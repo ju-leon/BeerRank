@@ -23,10 +23,18 @@ button {
   border: none;
 }
 
+button.primary {
+  background: var(--color-primary);
+}
+
+button.secondary {
+  background: var(--color-secondary);
+  color: #333;
+}
+
 button.ghost {
   background: rgba(0,0,0,0);
   border: 1px solid #AAA;
-  color: #333;
 }
 
 button.ghost.primary {
@@ -37,14 +45,7 @@ button.ghost.secondary {
   border-color: var(--color-secondary);
 }
 
-button.primary {
-  background: var(--color-primary);
-}
 
-button.secondary {
-  background: var(--color-secondary);
-  color: #333;
-}
 
 input {
   height: 48px;
