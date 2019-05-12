@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "users")
-public class User {
+public class User implements Comparable {
 
     @Id
     @Column(name = "username", updatable = false, nullable = false)
@@ -28,6 +28,11 @@ public class User {
     private List<String> history;
 
     public User(){
+        history = new ArrayList<String>();
+    }
+
+    public User(String username){
+        this.username = username;
         history = new ArrayList<String>();
     }
 
@@ -92,5 +97,24 @@ public class User {
                 ", password='" + password + '\'' +
                 ", score=" + score +
                 '}';
+    }
+
+
+    @Override
+    public int compareTo(Object o) {
+        User other = (User) o;
+       return other.score - this.score;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+    this.lastName = lastName;
     }
 }

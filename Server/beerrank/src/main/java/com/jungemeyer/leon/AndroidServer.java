@@ -12,14 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+@ServletComponentScan
 @SpringBootApplication
 @RestController
 public class AndroidServer implements CommandLineRunner {
@@ -42,20 +45,41 @@ public class AndroidServer implements CommandLineRunner {
             throw new EntryDoesNotExistException("No username specified");
         }
 
-
         user =  userRepository.findByUsername(user.getUsername());
 
         if (user == null) {
             throw new EntryDoesNotExistException("User does not exist");
         }
-
+        user.setPassword(null);
         return user;
-
     }
 
     @RequestMapping(value = "/user/login", method = RequestMethod.GET)
     public User checkLogin() {
-        return getCurrentUser();
+        User user = getCurrentUser();
+        user.setPassword(null);
+        return user;
+    }
+
+    @RequestMapping(value = "/user/change", method = RequestMethod.PUT)
+    public User changeUser(@RequestBody User user) throws EntryDoesNotExistException {
+        User dbUser = loadUser(user);
+
+        if(user.getPassword() != null){
+            dbUser.setPassword(user.getPassword());
+        }
+        if(user.getEmail() != null){
+            dbUser.setEmail(user.getEmail());
+        }
+        if(user.getFirstName() != null){
+            dbUser.setFirstName(user.getFirstName());
+        }
+        if(user.getLastName() != null){
+            dbUser.setLastName(user.getLastName());
+        }
+        userRepository.save(dbUser);
+        dbUser.setPassword(null);
+        return dbUser;
     }
 
     @RequestMapping(value = "/game", method = RequestMethod.GET)
@@ -73,26 +97,59 @@ public class AndroidServer implements CommandLineRunner {
         return game;
     }
 
+    /**
+     * creates user object with start score 1200 and saves the user in the database.
+     * password encryption
+     * @param user username != null and unique, password != null, email unique
+     * @param response
+     * @return
+     * @throws FalseInputException
+     */
     @RequestMapping(value = "/user/add", method = RequestMethod.POST)
     public User createUser(@RequestBody User user, HttpServletResponse response) throws FalseInputException {
 
+        if(user.getPassword() == null){
+            throw new FalseInputException("user must have a password");
+        }
+
+        if(user.getUsername() == null){
+            throw new FalseInputException("user must have a username");
+        }
+
         if(MongoDB.loadUser(user.getUsername()) != null) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return null;
+            throw new FalseInputException("username is already taken");
+        }
+
+        if(userRepository.findByEmail(user.getEmail()) != null){
+            throw new FalseInputException("email is already taken");
         }
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(user.getPassword()));
 
+        user.setScore(1200);
+
         userRepository.save(user);
 
+        user.setPassword(null);
         return user;
     }
 
     @RequestMapping(value = "/game", method = RequestMethod.POST)
-    public Game createGame(@RequestBody Game game) throws FalseInputException {
+    public Game createGame(@RequestBody Game game) throws FalseInputException, EntryDoesNotExistException {
         if(gameRepository.findBy_id(game.get_id()) != null){
             throw new FalseInputException("Game already exists!");
+        }
+        for(String username: game.getTeam1()){
+            User user = loadUser(new User(username));
+        }
+        for(String username: game.getTeam2()){
+            User user = loadUser(new User(username));
+        }
+        for(String username: game.getTeam1()){
+            if(game.getTeam2().contains(username)){
+                throw new FalseInputException("One User can only be in one team");
+            }
         }
 
         gameRepository.save(game);
@@ -102,17 +159,15 @@ public class AndroidServer implements CommandLineRunner {
     @RequestMapping(value = "/game", method = RequestMethod.PUT)
     public Game updateGameState(@RequestBody Game game) throws EntryDoesNotExistException {
         Game dbGame = loadGame(game);
-
         dbGame.setState(game.getState());
-
         gameRepository.save(dbGame);
-
         return dbGame;
     }
 
     /**
-     * berechnet neue elo werte nach einem Spiel
-     * @param game  Game Objekt, das den Ausgang des Spiels enthält, also result != 0.
+     * berechnet neue elo Werte nach einem Spiel, setzt GameState auf Finished, und fügt das Spiel in die
+     * History der beteiligten Spieler ein.
+     * @param game Game Objekt, das den Ausgang des Spiels enthält, also result != 0. Es wird _id und result! erwartet.
      * @return
      * @throws GameStateException
      * @throws FalseInputException
@@ -125,17 +180,24 @@ public class AndroidServer implements CommandLineRunner {
             throw new GameStateException("Game is already finished");
         }
         dbGame.setState(GameState.FINISHED);
-        dbGame.setResult(game.getResult());
 
-        if(dbGame.getResult() == 0){
+        if(game.getResult() == 0){
             throw new FalseInputException("Es gibt kein Untentschieden. Result darf nicht 0 sein");
         }
 
+        dbGame.setResult(game.getResult());
+
         dbGame.calculateScore();
 
-        dbGame.setState(game.getState());
-
         MongoDB.saveGame(dbGame);
+
+        for(String username: dbGame.getParticipatedUsernames()){
+            User user = loadUser(new User(username));
+            user.addHistory(dbGame.get_id());
+            MongoDB.saveUser(user);
+        }
+
+
 
         return dbGame;
     }
@@ -204,6 +266,22 @@ public class AndroidServer implements CommandLineRunner {
         return history;
 
     }
+
+
+    @RequestMapping(value = "/scoreboard", method = RequestMethod.GET)
+    public List<User> Scoreboard() {
+        List<User> users = new ArrayList<User>();
+        users.addAll(userRepository.findAll());
+        Collections.sort(users);
+        int toIndex = 20 < users.size() ? 20 : users.size();
+        List<User> returnUsers = users.subList(0, toIndex);
+        for(User user: returnUsers){
+            user.setPassword(null);
+        }
+        return returnUsers;
+    }
+
+
 
 
     private User getCurrentUser(){
