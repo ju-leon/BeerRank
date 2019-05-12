@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { reduxForm, Field } from 'redux-form'
+import { Link } from 'react-router-dom'
+
 
 import './PostGame.sass'
 
@@ -28,8 +30,9 @@ let PostGame = ({ handleSubmit }) => {
           : ''
       }
       <div>
-        <button className="primary">Next Game!</button>
-        <button className="secondary ghost">Home</button>
+        <Link to="/home">
+          <button className="primary">Next Game!</button>
+        </Link>
       </div>
     </div >
   )
