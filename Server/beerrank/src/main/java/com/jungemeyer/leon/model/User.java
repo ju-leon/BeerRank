@@ -67,7 +67,7 @@ public class User implements Comparable {
     }
 
     public void setScore(int score){
-        this.score = score;
+        this.score = score < 0 ? 0 : score;
     }
 
     public void setPassword(String password) {
