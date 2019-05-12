@@ -71,7 +71,7 @@ public class AndroidServer implements CommandLineRunner {
         return game;
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/add", method = RequestMethod.POST)
     public User createUser(@RequestBody User user, HttpServletResponse response) throws FalseInputException {
 
         if(MongoDB.loadUser(user.getUsername()) != null) {
