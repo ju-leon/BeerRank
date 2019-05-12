@@ -105,6 +105,9 @@
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-config:5.0.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:5.0.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:5.0.4.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: javax:javaee-api:6.0" level="project" />
+    <orderEntry type="library" name="Maven: javax:javaee-web-api:6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.persistence:eclipselink:2.7.4" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.persistence:jakarta.persistence:2.2.2" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.persistence:commonj.sdo:2.1.1" level="project" />
   </component>
 </module>
