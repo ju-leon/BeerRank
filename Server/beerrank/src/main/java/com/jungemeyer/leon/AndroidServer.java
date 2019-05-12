@@ -2,7 +2,7 @@ package com.jungemeyer.leon;
 
 import com.jungemeyer.leon.Exceptions.EntryDoesNotExistException;
 import com.jungemeyer.leon.Exceptions.FalseInputException;
-import com.jungemeyer.leon.Exceptions.FinishedGameException;
+import com.jungemeyer.leon.Exceptions.GameStateException;
 import com.jungemeyer.leon.database.GameRepository;
 import com.jungemeyer.leon.database.UserRepository;
 import com.jungemeyer.leon.model.Game;
@@ -17,6 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 @RestController
@@ -34,34 +36,44 @@ public class AndroidServer implements CommandLineRunner {
     }
 
 
-
-    /**
-     * Loads a user.
-     *
-     * If id is specified, loads by id, if no id is specified, loads by username
-     *
-     * @param user
-     * @return
-     */
-    @RequestMapping(value = "/getUser", method = RequestMethod.GET)
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
     public User loadUser(@RequestBody User user) throws EntryDoesNotExistException {
         if (user.getUsername() == null) {
             throw new EntryDoesNotExistException("No username specified");
         }
 
-        User returnUser = null;
-        returnUser =  userRepository.findByUsername(user.getUsername());
 
-        if (returnUser == null) {
+        user =  userRepository.findByUsername(user.getUsername());
+
+        if (user == null) {
             throw new EntryDoesNotExistException("User does not exist");
         }
 
-        return returnUser;
+        return user;
 
     }
 
+    @RequestMapping(value = "/user/login", method = RequestMethod.GET)
+    public User checkLogin() {
+        return getCurrentUser();
+    }
 
-    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/game", method = RequestMethod.GET)
+    public Game loadGame(@RequestBody Game game) throws EntryDoesNotExistException {
+        if (game.get_id() == null) {
+            throw new EntryDoesNotExistException("No game specified");
+        }
+
+        game =  gameRepository.findBy_id(game.get_id());
+
+        if (game == null) {
+            throw new EntryDoesNotExistException("Game does not exist");
+        }
+
+        return game;
+    }
+
+    @RequestMapping(value = "/user/add", method = RequestMethod.POST)
     public User createUser(@RequestBody User user, HttpServletResponse response) throws FalseInputException {
 
         if(MongoDB.loadUser(user.getUsername()) != null) {
@@ -77,19 +89,19 @@ public class AndroidServer implements CommandLineRunner {
         return user;
     }
 
-    @RequestMapping(value = "/addGame", method = RequestMethod.POST)
-    public Game createGame(@RequestBody Game game) throws EntryDoesNotExistException {
+    @RequestMapping(value = "/game", method = RequestMethod.POST)
+    public Game createGame(@RequestBody Game game) throws FalseInputException {
         if(gameRepository.findBy_id(game.get_id()) != null){
-
+            throw new FalseInputException("Game already exists!");
         }
 
         gameRepository.save(game);
         return game;
     }
 
-    @RequestMapping(value = "/updateGameState", method = RequestMethod.PUT)
-    public Game updateGameState(@RequestBody Game game) {
-        Game dbGame = gameRepository.findBy_id(game.get_id());
+    @RequestMapping(value = "/game", method = RequestMethod.PUT)
+    public Game updateGameState(@RequestBody Game game) throws EntryDoesNotExistException {
+        Game dbGame = loadGame(game);
 
         dbGame.setState(game.getState());
 
@@ -102,17 +114,18 @@ public class AndroidServer implements CommandLineRunner {
      * berechnet neue elo werte nach einem Spiel
      * @param game  Game Objekt, das den Ausgang des Spiels enthält, also result != 0.
      * @return
-     * @throws FinishedGameException
+     * @throws GameStateException
      * @throws FalseInputException
      */
-    @RequestMapping(value = "/setResult", method = RequestMethod.PUT)
-    public Game setResult(@RequestBody Game game) throws FinishedGameException, FalseInputException{
-        Game dbGame = gameRepository.findBy_id(game.get_id());
+    @RequestMapping(value = "/game/setResult", method = RequestMethod.PUT)
+    public Game setResult(@RequestBody Game game) throws GameStateException, FalseInputException, EntryDoesNotExistException{
+        Game dbGame = loadGame(game);
 
         if(GameState.FINISHED.equals(dbGame.getState())) {
-            throw new FinishedGameException("Game is already finished");
+            throw new GameStateException("Game is already finished");
         }
         dbGame.setState(GameState.FINISHED);
+        dbGame.setResult(game.getResult());
 
         if(dbGame.getResult() == 0){
             throw new FalseInputException("Es gibt kein Untentschieden. Result darf nicht 0 sein");
@@ -127,30 +140,77 @@ public class AndroidServer implements CommandLineRunner {
         return dbGame;
     }
 
-    @GetMapping(value = "/joinGame")
-    public Game get(@RequestParam String gameID) throws FalseInputException {
+    @GetMapping(value = "/game/join")
+    public Game joinGame(@RequestParam String gameID) throws FalseInputException, EntryDoesNotExistException {
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        System.out.println("Username: " + ((org.springframework.security.core.userdetails.User) principal).getUsername());
-        User currentUser = (User) userRepository.findByUsername(((org.springframework.security.core.userdetails.User) principal).getUsername());
+        User currentUser = getCurrentUser();
 
         if (currentUser == null) {
-            System.out.println("Fatal error!");
-            throw new FalseInputException("Error");
+            throw new EntryDoesNotExistException("Fatal error! currentUser does not exist");
         }
-
         Game dbGame = gameRepository.findBy_id(gameID);
 
         if (dbGame == null) {
             throw new FalseInputException("GameID does not exist.");
         }
 
+        if(dbGame.getTeam1().contains(currentUser.getUsername()) || dbGame.getTeam2().contains(currentUser.getUsername())){
+            throw new FalseInputException("User is already in this game");
+        }
         dbGame.addTeam1(currentUser.getUsername());
+        MongoDB.saveGame(dbGame);
 
         return dbGame;
 
         // TODO: Link to frontend Lobby
+    }
+
+
+
+    @RequestMapping(value = "/game/changeTeam", method = RequestMethod.PUT)
+    public Game changeTeam(@RequestBody Game game) throws EntryDoesNotExistException {
+
+        game = loadGame(game);
+
+        String currentUser = getCurrentUser().getUsername();
+
+        if(!game.getTeam1().contains(currentUser) && !game.getTeam2().contains(currentUser)){
+            throw new EntryDoesNotExistException("this player does not take part in this game");
+        }
+
+        if(game.getTeam1().contains(currentUser)){
+            game.addTeam2(currentUser);
+        }else{
+            game.addTeam1(currentUser);
+        }
+
+        MongoDB.saveGame(game);
+
+        return game;
+    }
+
+    @RequestMapping(value = "/user/history", method = RequestMethod.PUT)
+    public List<Game> getHistory(User user) throws EntryDoesNotExistException{
+
+        List<Game> history = new ArrayList<Game>();
+
+        user = loadUser(user);
+
+        for(String gameID: user.getHistory()){
+            Game game = gameRepository.findBy_id(gameID);
+            history.add(game);
+        }
+
+        return history;
+
+    }
+
+
+    private User getCurrentUser(){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+       // System.out.println("Username: " + ((org.springframework.security.core.userdetails.User) principal).getUsername());
+        return (User) userRepository.findByUsername(((org.springframework.security.core.userdetails.User) principal).getUsername());
     }
 
 
