@@ -1,14 +1,14 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://192.168.173.87:8080/',
+  baseURL: 'http://192.168.172.180:8080',
 })
 
 export const getUser = async (username) => {
   try {
     const response = await api.get(
       '/user',
-      { body: {username} }
+      { username }
     )
     return response.data
   } catch (error) {
@@ -20,7 +20,7 @@ export const addUser = async (user) => {
   try {
     const response = await api.post(
       '/user/add',
-      { body: user }
+      user
     )
     return response.data
   } catch (error) {
@@ -34,7 +34,7 @@ export const login = async (username, password) => {
     console.log(hash)
     const response = await api.get(
       '/user/login',
-      { header: {Authorization: `Basic ${hash}`} }
+      { headers: { 'Authorization': `Basic ${hash}`}}
     )
     return response.status === 200
   } catch (error) {

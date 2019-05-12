@@ -17,6 +17,7 @@ let SignUp = ({handleSubmit, login}) => {
   const _handleSubmit = async (values) => {
     setIsLoading(true)
 
+    console.log(values)
     await addUser(values)
 
     const {username, password} = values

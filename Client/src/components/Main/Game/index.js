@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 
 import {PRE_GAME, IN_GAME, POST_GAME, END_GAME } from './states'
+import { addGame } from 'apis/game'
 import PreGame from './PreGame'
 import InGame from './InGame'
 import PostGame from './PostGame'
@@ -22,6 +23,10 @@ let gameMockup = {
 
 export default ({game = gameMockup}) => {
   const [gameState, setGameState] = useState(PRE_GAME)
+
+  const handleClick = async () => {
+    addGame()
+  }
 
   let screen
   switch(gameState) {

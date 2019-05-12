@@ -1,7 +1,14 @@
 import { login as apiLogin } from 'apis/user'
 import { LOG_IN, LOG_OUT } from 'actions/types';
 
-export const login = (user) => async dispatch => {
+export const login = (user) => {
+  return {
+    type: LOG_IN,
+    payload: user,
+  }
+}
+
+export const _login = (user) => async dispatch => {
   const valid = await apiLogin(user.username, user.password)
   if (valid) {
     dispatch ({
