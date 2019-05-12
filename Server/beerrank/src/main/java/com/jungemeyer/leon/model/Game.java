@@ -25,6 +25,12 @@ public class Game {
         team2 = new ArrayList<String>();
     }
 
+    public Game(String _id){
+        this._id = _id;
+        team1 = new ArrayList<String>();
+        team2 = new ArrayList<String>();
+    }
+
     public Game(List<String> team1, List<String> team2, int result){
         this.team1 = team1;
         this.team2 = team2;
@@ -32,11 +38,22 @@ public class Game {
     }
 
     public List<String> getTeam1() {
-        return team1;
+        List<String> t1 = new ArrayList<String>();
+        t1.addAll(team1);
+        return t1;
     }
 
     public List<String> getTeam2() {
-        return team2;
+        List<String> t2 = new ArrayList<String>();
+        t2.addAll(team2);
+        return t2;
+    }
+
+    public List<String> getParticipatedUsernames(){
+        List<String> users = new ArrayList<String>();
+        users.addAll(team1);
+        users.addAll(team2);
+        return users;
     }
 
     public void addTeam1(String user){

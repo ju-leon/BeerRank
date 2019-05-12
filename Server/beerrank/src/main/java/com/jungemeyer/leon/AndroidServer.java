@@ -90,9 +90,20 @@ public class AndroidServer implements CommandLineRunner {
     }
 
     @RequestMapping(value = "/game", method = RequestMethod.POST)
-    public Game createGame(@RequestBody Game game) throws FalseInputException {
+    public Game createGame(@RequestBody Game game) throws FalseInputException, EntryDoesNotExistException {
         if(gameRepository.findBy_id(game.get_id()) != null){
             throw new FalseInputException("Game already exists!");
+        }
+        for(String username: game.getTeam1()){
+            User user = loadUser(new User(username));
+        }
+        for(String username: game.getTeam2()){
+            User user = loadUser(new User(username));
+        }
+        for(String username: game.getTeam1()){
+            if(game.getTeam2().contains(username)){
+                throw new FalseInputException("One User can only be in one team");
+            }
         }
 
         gameRepository.save(game);
@@ -111,8 +122,9 @@ public class AndroidServer implements CommandLineRunner {
     }
 
     /**
-     * berechnet neue elo werte nach einem Spiel
-     * @param game  Game Objekt, das den Ausgang des Spiels enthält, also result != 0.
+     * berechnet neue elo Werte nach einem Spiel, setzt GameState auf Finished, und fügt das Spiel in die
+     * History der beteiligten Spieler ein.
+     * @param game Game Objekt, das den Ausgang des Spiels enthält, also result != 0. Es wird _id und result! erwartet.
      * @return
      * @throws GameStateException
      * @throws FalseInputException
@@ -125,17 +137,24 @@ public class AndroidServer implements CommandLineRunner {
             throw new GameStateException("Game is already finished");
         }
         dbGame.setState(GameState.FINISHED);
-        dbGame.setResult(game.getResult());
 
-        if(dbGame.getResult() == 0){
+        if(game.getResult() == 0){
             throw new FalseInputException("Es gibt kein Untentschieden. Result darf nicht 0 sein");
         }
 
+        dbGame.setResult(game.getResult());
+
         dbGame.calculateScore();
 
-        dbGame.setState(game.getState());
-
         MongoDB.saveGame(dbGame);
+
+        for(String username: dbGame.getParticipatedUsernames()){
+            User user = loadUser(new User(username));
+            user.addHistory(dbGame.get_id());
+            MongoDB.saveUser(user);
+        }
+
+
 
         return dbGame;
     }
