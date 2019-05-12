@@ -165,7 +165,7 @@ public class AndroidServer implements CommandLineRunner {
 
 
 
-    @RequestMapping(value = "/changeTeam", method = RequestMethod.PUT)
+    @RequestMapping(value = "/game/changeTeam", method = RequestMethod.PUT)
     public Game changeTeam(@RequestBody Game game) throws EntryDoesNotExistException {
 
         game = loadGame(game);
