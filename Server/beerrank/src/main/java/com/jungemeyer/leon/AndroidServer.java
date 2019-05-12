@@ -51,6 +51,11 @@ public class AndroidServer implements CommandLineRunner {
 
     }
 
+    @RequestMapping(value = "/user/login", method = RequestMethod.GET)
+    public User checkLogin() {
+        return getCurrentUser();
+    }
+
     @RequestMapping(value = "/game", method = RequestMethod.GET)
     public Game loadGame(@RequestBody Game game) throws EntryDoesNotExistException {
         if (game.get_id() == null) {
