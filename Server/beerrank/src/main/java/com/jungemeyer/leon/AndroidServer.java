@@ -78,9 +78,9 @@ public class AndroidServer implements CommandLineRunner {
     }
 
     @RequestMapping(value = "/addGame", method = RequestMethod.POST)
-    public Game createGame(@RequestBody Game game) throws EntryDoesNotExistException {
+    public Game createGame(@RequestBody Game game) throws FalseInputException {
         if(gameRepository.findBy_id(game.get_id()) != null){
-
+            throw new FalseInputException("Game already exists!");
         }
 
         gameRepository.save(game);
@@ -136,16 +136,17 @@ public class AndroidServer implements CommandLineRunner {
         User currentUser = (User) userRepository.findByUsername(((org.springframework.security.core.userdetails.User) principal).getUsername());
 
         if (currentUser == null) {
-            System.out.println("Fatal error!");
-            throw new FalseInputException("Error");
+            System.out.println("Fatal error! currentUser does not exist");
         }
-
         Game dbGame = gameRepository.findBy_id(gameID);
 
         if (dbGame == null) {
             throw new FalseInputException("GameID does not exist.");
         }
 
+        if(dbGame.getTeam1().contains(currentUser.getUsername()) || dbGame.getTeam2().contains(currentUser.getUsername())){
+            throw new FalseInputException("User is already in this game");
+        }
         dbGame.addTeam1(currentUser.getUsername());
 
         return dbGame;
