@@ -189,7 +189,7 @@ public class AndroidServer implements CommandLineRunner {
         return game;
     }
 
-    @RequestMapping(value = "/history", method = RequestMethod.PUT)
+    @RequestMapping(value = "/user/history", method = RequestMethod.PUT)
     public List<Game> getHistory(User user) throws EntryDoesNotExistException{
 
         List<Game> history = new ArrayList<Game>();
