@@ -123,6 +123,7 @@ public class AndroidServer implements CommandLineRunner {
             throw new FinishedGameException("Game is already finished");
         }
         dbGame.setState(GameState.FINISHED);
+        dbGame.setResult(game.getResult());
 
         if(dbGame.getResult() == 0){
             throw new FalseInputException("Es gibt kein Untentschieden. Result darf nicht 0 sein");

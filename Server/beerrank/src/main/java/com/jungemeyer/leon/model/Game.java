@@ -59,6 +59,10 @@ public class Game {
         return result;
     }
 
+    public void setResult(int result) {
+        this.result = result;
+    }
+
     public String get_id() {
         return _id;
     }
