@@ -11,7 +11,7 @@ public class AddResponseHeaderFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        httpServletResponse.setHeader("Access-Control-Allow-Origin:", "*");
+        httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
         chain.doFilter(request, response);
     }
 
