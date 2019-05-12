@@ -31,6 +31,11 @@ public class User {
         history = new ArrayList<String>();
     }
 
+    public User(String username){
+        this.username = username;
+        history = new ArrayList<String>();
+    }
+
     public User(int score)
     {
         history = new ArrayList<String>();
