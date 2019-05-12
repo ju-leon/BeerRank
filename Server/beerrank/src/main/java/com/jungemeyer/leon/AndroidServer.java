@@ -2,7 +2,7 @@ package com.jungemeyer.leon;
 
 import com.jungemeyer.leon.Exceptions.EntryDoesNotExistException;
 import com.jungemeyer.leon.Exceptions.FalseInputException;
-import com.jungemeyer.leon.Exceptions.FinishedGameException;
+import com.jungemeyer.leon.Exceptions.GameStateException;
 import com.jungemeyer.leon.database.GameRepository;
 import com.jungemeyer.leon.database.UserRepository;
 import com.jungemeyer.leon.model.Game;
@@ -17,6 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 @RestController
@@ -40,14 +42,14 @@ public class AndroidServer implements CommandLineRunner {
             throw new EntryDoesNotExistException("No username specified");
         }
 
-        User returnUser = null;
-        returnUser =  userRepository.findByUsername(user.getUsername());
 
-        if (returnUser == null) {
+        user =  userRepository.findByUsername(user.getUsername());
+
+        if (user == null) {
             throw new EntryDoesNotExistException("User does not exist");
         }
 
-        return returnUser;
+        return user;
 
     }
 
@@ -93,8 +95,8 @@ public class AndroidServer implements CommandLineRunner {
     }
 
     @RequestMapping(value = "/game", method = RequestMethod.PUT)
-    public Game updateGameState(@RequestBody Game game) {
-        Game dbGame = gameRepository.findBy_id(game.get_id());
+    public Game updateGameState(@RequestBody Game game) throws EntryDoesNotExistException {
+        Game dbGame = loadGame(game);
 
         dbGame.setState(game.getState());
 
@@ -107,15 +109,15 @@ public class AndroidServer implements CommandLineRunner {
      * berechnet neue elo werte nach einem Spiel
      * @param game  Game Objekt, das den Ausgang des Spiels enthält, also result != 0.
      * @return
-     * @throws FinishedGameException
+     * @throws GameStateException
      * @throws FalseInputException
      */
     @RequestMapping(value = "/game/setResult", method = RequestMethod.PUT)
-    public Game setResult(@RequestBody Game game) throws FinishedGameException, FalseInputException{
-        Game dbGame = gameRepository.findBy_id(game.get_id());
+    public Game setResult(@RequestBody Game game) throws GameStateException, FalseInputException, EntryDoesNotExistException{
+        Game dbGame = loadGame(game);
 
         if(GameState.FINISHED.equals(dbGame.getState())) {
-            throw new FinishedGameException("Game is already finished");
+            throw new GameStateException("Game is already finished");
         }
         dbGame.setState(GameState.FINISHED);
 
@@ -179,6 +181,22 @@ public class AndroidServer implements CommandLineRunner {
         MongoDB.saveGame(game);
 
         return game;
+    }
+
+    @RequestMapping(value = "/history", method = RequestMethod.PUT)
+    public List<Game> getHistory(User user) throws EntryDoesNotExistException{
+
+        List<Game> history = new ArrayList<Game>();
+
+        user = loadUser(user);
+
+        for(String gameID: user.getHistory()){
+            Game game = gameRepository.findBy_id(gameID);
+            history.add(game);
+        }
+
+        return history;
+
     }
 
 

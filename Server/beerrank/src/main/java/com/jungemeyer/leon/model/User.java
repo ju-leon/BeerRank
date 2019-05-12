@@ -1,10 +1,14 @@
 package com.jungemeyer.leon.model;
 
+import com.jungemeyer.leon.Exceptions.EntryDoesNotExistException;
+import com.jungemeyer.leon.MongoDB;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Column;
+import java.util.ArrayList;
+import java.util.List;
 
 @Document(collection = "users")
 public class User {
@@ -18,16 +22,18 @@ public class User {
 
     @Indexed(unique = true)
     private String email;
-
     private String password;
-
     private int score;
 
-    public User(){
+    private List<String> history;
 
+    public User(){
+        history = new ArrayList<String>();
     }
 
-    public User(int score){
+    public User(int score)
+    {
+        history = new ArrayList<String>();
         this.score = score;
     }
 
@@ -61,6 +67,19 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<String> getHistory(){
+        List<String> h = new ArrayList<>();
+        h.addAll(history);
+        return h;
+    }
+
+    public void addHistory(String gameID){
+        if(history.size() >= 20){
+            history.remove(19);
+        }
+        history.add(0, gameID);
     }
 
     @Override

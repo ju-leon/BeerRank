@@ -26,6 +26,8 @@ public abstract class MongoDB {
         return userRepository.findByUsername(username);
     }
 
+    public static Game loadGame(String gameID) {return gameRepository.findBy_id(gameID);}
+
     public static void saveGame(Game game) {
         gameRepository.save(game);
     }
