@@ -13,7 +13,7 @@ export default ({setState}) => {
       </h1>
 
       <div>
-        <button className="primary button" onClick={() => setState('POST_GAME')}>E N D E</button>
+        <button className="primary button" onClick={() => setState('POST_GAME')}>F I N I S H</button>
       </div>
     </div>
   )

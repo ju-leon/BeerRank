@@ -11,7 +11,7 @@ export default ({game, setState, currentTeam, gotoTeam}) => {
   return (
     <div className="Lobby ui container">
       <div className="side">
-        <Team players={teamA} active={currentTeam === 0} onClick={() => gotoTeam(0)} />
+        <Team players={currentTeam === 0 ? teamA : teamB} active={currentTeam === 0} onClick={() => gotoTeam(0)} />
         {/* <Cups direction="down" level={teamA.length} /> */}
       </div>
 
@@ -19,7 +19,7 @@ export default ({game, setState, currentTeam, gotoTeam}) => {
 
       <div className="side">
         {/* <Cups direction="up" level={teamB.length} /> */}
-        <Team players={teamB} active={currentTeam === 1} onClick={() => gotoTeam(1)} />
+        <Team players={currentTeam === 1 ? teamA : teamB} active={currentTeam === 1} onClick={() => gotoTeam(1)} />
       </div>
     </div>
   )
