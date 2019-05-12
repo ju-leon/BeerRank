@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "users")
-public class User {
+public class User implements Comparable {
 
     @Id
     @Column(name = "username", updatable = false, nullable = false)
@@ -97,5 +97,11 @@ public class User {
                 ", password='" + password + '\'' +
                 ", score=" + score +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        User other = (User) o;
+       return other.score - this.score;
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @SpringBootApplication
@@ -42,7 +43,6 @@ public class AndroidServer implements CommandLineRunner {
             throw new EntryDoesNotExistException("No username specified");
         }
 
-
         user =  userRepository.findByUsername(user.getUsername());
 
         if (user == null) {
@@ -50,7 +50,6 @@ public class AndroidServer implements CommandLineRunner {
         }
 
         return user;
-
     }
 
     @RequestMapping(value = "/user/login", method = RequestMethod.GET)
@@ -76,7 +75,7 @@ public class AndroidServer implements CommandLineRunner {
     /**
      * creates user object with start score 1200 and saves the user in the database.
      * password encryption
-     * @param user username != null
+     * @param user username != null and unique, password != null, email unique
      * @param response
      * @return
      * @throws FalseInputException
@@ -134,11 +133,8 @@ public class AndroidServer implements CommandLineRunner {
     @RequestMapping(value = "/game", method = RequestMethod.PUT)
     public Game updateGameState(@RequestBody Game game) throws EntryDoesNotExistException {
         Game dbGame = loadGame(game);
-
         dbGame.setState(game.getState());
-
         gameRepository.save(dbGame);
-
         return dbGame;
     }
 
@@ -244,6 +240,18 @@ public class AndroidServer implements CommandLineRunner {
         return history;
 
     }
+
+
+    @RequestMapping(value = "/scoreboard", method = RequestMethod.GET)
+    public List<User> Scoreboard() {
+        List<User> users = new ArrayList<User>();
+        users.addAll(userRepository.findAll());
+        Collections.sort(users);
+        int toIndex = 20 < users.size() ? 20 : users.size();
+        return users.subList(0, toIndex);
+    }
+
+
 
 
     private User getCurrentUser(){
