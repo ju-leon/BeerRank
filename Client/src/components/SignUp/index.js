@@ -15,8 +15,10 @@ let SignUp = ({handleSubmit, login}) => {
   
   const _handleSubmit = async (values) => {
     setIsLoading(true)
-    login(values)
-    setIsLoading(false)
+    setTimeout(() => {
+      login(values)
+      setIsLoading(false)
+    }, 1000)
   }
   
   return (
