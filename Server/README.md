@@ -30,7 +30,12 @@ POST: /user/add
 		}
 
 GET: /user/login
-	
+
+GET: /user/history
+	Body:
+    {
+			"username":"yourusername"
+    }
 ```
 
 Game:
