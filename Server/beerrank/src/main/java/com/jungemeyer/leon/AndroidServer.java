@@ -34,16 +34,7 @@ public class AndroidServer implements CommandLineRunner {
     }
 
 
-
-    /**
-     * Loads a user.
-     *
-     * If id is specified, loads by id, if no id is specified, loads by username
-     *
-     * @param user
-     * @return
-     */
-    @RequestMapping(value = "/getUser", method = RequestMethod.GET)
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
     public User loadUser(@RequestBody User user) throws EntryDoesNotExistException {
         if (user.getUsername() == null) {
             throw new EntryDoesNotExistException("No username specified");
@@ -61,7 +52,7 @@ public class AndroidServer implements CommandLineRunner {
     }
 
 
-    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
     public User createUser(@RequestBody User user, HttpServletResponse response) throws FalseInputException {
 
         if(MongoDB.loadUser(user.getUsername()) != null) {
@@ -77,7 +68,7 @@ public class AndroidServer implements CommandLineRunner {
         return user;
     }
 
-    @RequestMapping(value = "/addGame", method = RequestMethod.POST)
+    @RequestMapping(value = "/game", method = RequestMethod.POST)
     public Game createGame(@RequestBody Game game) throws EntryDoesNotExistException {
         if(gameRepository.findBy_id(game.get_id()) != null){
 
@@ -87,7 +78,7 @@ public class AndroidServer implements CommandLineRunner {
         return game;
     }
 
-    @RequestMapping(value = "/updateGameState", method = RequestMethod.PUT)
+    @RequestMapping(value = "/game", method = RequestMethod.PUT)
     public Game updateGameState(@RequestBody Game game) {
         Game dbGame = gameRepository.findBy_id(game.get_id());
 
@@ -105,7 +96,7 @@ public class AndroidServer implements CommandLineRunner {
      * @throws FinishedGameException
      * @throws FalseInputException
      */
-    @RequestMapping(value = "/setResult", method = RequestMethod.PUT)
+    @RequestMapping(value = "/game/setResult", method = RequestMethod.PUT)
     public Game setResult(@RequestBody Game game) throws FinishedGameException, FalseInputException{
         Game dbGame = gameRepository.findBy_id(game.get_id());
 
@@ -127,7 +118,7 @@ public class AndroidServer implements CommandLineRunner {
         return dbGame;
     }
 
-    @GetMapping(value = "/joinGame")
+    @GetMapping(value = "/game/join")
     public Game get(@RequestParam String gameID) throws FalseInputException {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
