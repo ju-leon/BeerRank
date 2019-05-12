@@ -41,10 +41,10 @@ export default (props) => {
           style={{ width: '100%' }}
         />
         <div className="Text">...or enter the lobby id:</div>
-        <form className="ui small action right labeled input" onSubmit={handleSubmit}>
+        <form className="ui small right labeled input" onSubmit={handleSubmit}>
           <input type="text" placeholder="123456" value={gameId} onChange={handleChange}/>
-          <button className="ui icon button">
-            <i className="search icon"></i> 
+          <button className="ui button">
+            Let's go!
           </button>
         </form>
       </div>

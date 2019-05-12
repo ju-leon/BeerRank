@@ -2,6 +2,26 @@
     height: 100vh;
 }
 
+.Settings .header {
+    box-shadow: var(--shadow-default);
+    height: fit-content;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.Settings .header .placeholder {
+    width: 48px;
+    height: 48px;
+}
+.Settings h1 {
+    margin: 0;
+    padding: 0;
+}
+
 .wrapper {
     display: flex;
     flex-flow: column;
@@ -30,3 +50,4 @@
     display: flex !important;
     flex-flow: row;
 }
+

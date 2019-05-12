@@ -44,15 +44,17 @@ export default (props) => {
 
   return (
     <div className="Settings">
-      <div className="Header">
+      <div className="header">
         <div className="back">
           <Link to="/home">
             <i className="angle left big icon"></i>
           </Link>
         </div>
+        <h1>Settings</h1>
+        <div className="placeholder"></div>
       </div>
       <div className="wrapper">
-        <h1>Settings</h1>
+        
         <div className="ui large list settingsList">
           <div className="item inLine">
             <i className="user icon"></i>
