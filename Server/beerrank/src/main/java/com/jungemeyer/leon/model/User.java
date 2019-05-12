@@ -105,4 +105,16 @@ public class User implements Comparable {
         User other = (User) o;
        return other.score - this.score;
     }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+    this.lastName = lastName;
+    }
 }
