@@ -11,7 +11,7 @@ export default ({activeTab, tabClickHandler}) => {
         <h2>Lobby</h2>
       </Tab>
       <Tab isActive={activeTab === 1} onClick={() => tabClickHandler(1)}>
-        <h2>Code</h2>
+      <i class="big user plus icon"></i>
       </Tab>
     </div>
   )
