@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 import {PRE_GAME, IN_GAME, POST_GAME, END_GAME } from './states'
 import PreGame from './PreGame'
@@ -7,7 +7,7 @@ import PostGame from './PostGame'
 
 import './Game.sass'
 
-const gameMockup = {
+let gameMockup = {
   id: "123456",
   teamA: [
     {userName: "Gnarlex", rank: 1023},
@@ -21,16 +21,18 @@ const gameMockup = {
 }
 
 export default ({game = gameMockup}) => {
+  const [gameState, setGameState] = useState(PRE_GAME)
+
   let screen
-  switch(game.state) {
+  switch(gameState) {
     case PRE_GAME:
-      screen = <PreGame game={game}/>
+      screen = <PreGame game={game} setState={setGameState}/>
       break
     case IN_GAME:
-      screen = <InGame game={game}/>
+      screen = <InGame game={game} setState={setGameState}/>
       break
     case POST_GAME:
-      screen = <PostGame game={game}/>
+      screen = <PostGame game={game} setState={setGameState}/>
       break
     default:
       screen = {}

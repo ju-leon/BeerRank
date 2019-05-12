@@ -5,11 +5,12 @@ import TabNav from './TabNav'
 import Lobby from './Lobby'
 import Code from './Code'
 
-export default ({game}) => {
+export default ({game, setState}) => {
   const [tabIndex, setTabIndex] = useState(0)
+  const [currentTeam, setCurrentTeam] = useState(0)
 
   const screen = tabIndex === 0
-    ? <Lobby game={game} />
+    ? <Lobby game={game} currentTeam={currentTeam} gotoTeam={setCurrentTeam} setState={setState}/>
     : <Code gameId={game.id} />
 
   const {id, teamA, teamB} = game
