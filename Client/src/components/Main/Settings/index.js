@@ -1,26 +1,26 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+
 
 import './index.css'
-// import { getMaxListeners } from 'cluster';
 
-
-export default (props) => {
+let Settings = ({ user }) => {
   const [userNameEditMode, setUserNameEditMode] = useState("read")
   const [emailEditMode, setEmailEditMode] = useState("read")
   const [passwordEditMode, setPasswordEditMode] = useState("read")
   const { newUserName, newPassWord, newEmail } = ""
-  const { userName, passWord, eMail } = { userName : "Hans Müller", passWord : '****', eMail : 'test@getMaxListeners.com' }//props
+  const { username, password, email } = user
 
   const handleEdit = (field) => {
     switch (field) {
-      case 'userName':
+      case 'username':
         setUserNameEditMode(userNameEditMode === "read" ? "edit" : "read")
         break;
-      case 'eMail':
+      case 'email':
         setEmailEditMode(emailEditMode === "read" ? "edit" : "read")
         break;
-      case 'passWord':
+      case 'password':
         setPasswordEditMode(passwordEditMode === "read" ? "edit" : "read")
         break;
     }
@@ -54,26 +54,25 @@ export default (props) => {
         <div className="placeholder"></div>
       </div>
       <div className="wrapper">
-        
+
         <div className="ui large list settingsList">
           <div className="item inLine">
             <i className="user icon"></i>
             {
               userNameEditMode === "read"
                 ? <div className="inLine">
-                    <div className="content">{userName}</div>
-                    <i className="right floated edit icon" onClick={() => handleEdit('userName')}></i>
-                  </div>
+                  <div className="content">{username}</div>
+                  <i className="right floated edit icon" onClick={() => handleEdit('userName')}></i>
+                </div>
                 : <div className="inLine">
-                    <div className="ui icon small input">
-                      <input type="text" placeholder={userName} value={newUserName}  ></input>
-                    </div>
-                    <i class="check circle outline icon" onClick={() => handleSubmit({newUserName})}></i>
+                  <div className="ui icon small input">
+                    <input type="text" placeholder={username} value={newUserName}  ></input>
                   </div>
+                  <i class="check circle outline icon" onClick={() => handleSubmit({ newUserName })}></i>
+                </div>
             }
           </div>
           <div className="item inLine">
-            {/* <i className="right floated edit icon "></i> */}
             <i className="marker icon"></i>
             <div className="content">
               Karlsruhe, Germany
@@ -84,15 +83,15 @@ export default (props) => {
             {
               emailEditMode === "read"
                 ? <div className="inLine">
-                    <div className="content">{eMail}</div>
-                    <i className="right floated edit icon" onClick={() => handleEdit('eMail')}></i>
-                  </div>
+                  <div className="content">{email}</div>
+                  <i className="right floated edit icon" onClick={() => handleEdit('eMail')}></i>
+                </div>
                 : <div className="inLine">
-                    <div className="ui icon small input">
-                      <input type="text" placeholder={eMail} value={newEmail}  onSubmit={() => handleSubmit(newEmail)}></input>
-                    </div>
-                    <i class="check circle outline icon"></i>
+                  <div className="ui icon small input">
+                    <input type="text" placeholder={email} value={newEmail} onSubmit={() => handleSubmit(newEmail)}></input>
                   </div>
+                  <i class="check circle outline icon"></i>
+                </div>
             }
           </div>
           <div className="item inLine">
@@ -100,16 +99,16 @@ export default (props) => {
             {
               passwordEditMode === "read"
                 ? <div className="inLine">
-                    <div className="content">*******</div>
-                    <i className="right floated edit icon" onClick={() => handleEdit('passWord')}></i>
-                  </div>
+                  <div className="content">*******</div>
+                  <i className="right floated edit icon" onClick={() => handleEdit('passWord')}></i>
+                </div>
                 : <div className="inLine">
-                    <div className="ui icon small input">
-                      <input type="text" placeholder='******' value={newPassWord} onSubmit={() => handleSubmit(newPassWord)}></input>
-                    </div>
-                    <i class="check circle outline icon"></i>
-
+                  <div className="ui icon small input">
+                    <input type="text" placeholder='******' value={newPassWord} onSubmit={() => handleSubmit(newPassWord)}></input>
                   </div>
+                  <i class="check circle outline icon"></i>
+
+                </div>
             }
           </div>
         </div>
@@ -117,3 +116,14 @@ export default (props) => {
     </div>
   )
 }
+
+const mapStateToProps = ({ user }) => {
+  return { user }
+}
+
+Settings = connect(
+  mapStateToProps,
+  {}
+)(Settings)
+
+export default Settings
