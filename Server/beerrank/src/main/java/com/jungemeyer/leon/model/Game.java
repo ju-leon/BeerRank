@@ -41,12 +41,16 @@ public class Game {
 
     public void addTeam1(String user){
         team2.remove(user);
-        team1.add(user);
+        if(!team1.contains(user)) {
+            team1.add(user);
+        }
     }
 
     public void addTeam2(String user){
         team1.remove(user);
-        team2.add(user);
+        if (!team2.contains(user)) {
+            team2.add(user);
+        }
     }
 
 
