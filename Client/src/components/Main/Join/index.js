@@ -12,7 +12,7 @@ export default (props) => {
 
   const handleScan = data => {
     if (data)
-      console.log(data)
+      props.history.push(data)
   }
 
   const handleError = err => console.log(err)
