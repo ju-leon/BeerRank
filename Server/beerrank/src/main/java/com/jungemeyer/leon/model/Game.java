@@ -21,8 +21,8 @@ public class Game {
 
 
     public Game(){
-        team1 = new ArrayList<>();
-        team2 = new ArrayList<>();
+        team1 = new ArrayList<String>();
+        team2 = new ArrayList<String>();
     }
 
     public Game(List<String> team1, List<String> team2, int result){
@@ -41,18 +41,26 @@ public class Game {
 
     public void addTeam1(String user){
         team2.remove(user);
-        team1.add(user);
+        if(!team1.contains(user)) {
+            team1.add(user);
+        }
     }
 
     public void addTeam2(String user){
         team1.remove(user);
-        team2.add(user);
+        if (!team2.contains(user)) {
+            team2.add(user);
+        }
     }
 
 
 
     public int getResult() {
         return result;
+    }
+
+    public void setResult(int result) {
+        this.result = result;
     }
 
     public String get_id() {
