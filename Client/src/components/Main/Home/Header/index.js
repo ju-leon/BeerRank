@@ -13,7 +13,7 @@ export default ({score=1000}) => {
           <div className="value">{score}</div>
         </div>
         <Logo/>
-        <Link to="/settings"><i class="cog icon big"></i></Link>
+        <Link to="/settings"><i className="cog icon big"></i></Link>
     </div>
   )
 }

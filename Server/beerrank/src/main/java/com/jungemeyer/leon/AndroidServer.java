@@ -17,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -106,7 +105,9 @@ public class AndroidServer implements CommandLineRunner {
      * @throws FalseInputException
      */
     @RequestMapping(value = "/user/add", method = RequestMethod.POST)
-    public User createUser(@RequestBody User user, HttpServletResponse response) throws FalseInputException {
+    public User createUser(@RequestBody User user) throws FalseInputException {
+
+        System.out.println(user);
 
         if(user.getPassword() == null){
             throw new FalseInputException("user must have a password");

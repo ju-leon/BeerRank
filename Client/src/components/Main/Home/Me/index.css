@@ -1,0 +1,25 @@
+.Me .item {
+    display: flex !important;
+    flex-flow: row !important;
+    justify-content: center;
+    align-items: center;
+}
+
+.Me .item > * {
+    margin: 0px 10px;
+}
+
+.Me .icon {
+    width: 24px;
+    height: 24px;
+}
+
+svg.winnerIcon {
+    src: transparent url('/img/trophy.svg') center center no-repeat;
+    fill: green;
+}
+
+svg.loserIcon {
+    background: transparent url('/img/plastic-cup.svg') center center no-repeat;
+    fill: red;
+}
