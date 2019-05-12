@@ -57,6 +57,15 @@ public class AndroidServer implements CommandLineRunner {
             throw new EntryDoesNotExistException("No game specified");
         }
 
+        game =  gameRepository.findBy_id(game.get_id());
+
+        if (game == null) {
+            throw new EntryDoesNotExistException("Game does not exist");
+        }
+
+        return game;
+    }
+
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public User createUser(@RequestBody User user, HttpServletResponse response) throws FalseInputException {
 
@@ -123,9 +132,8 @@ public class AndroidServer implements CommandLineRunner {
         return dbGame;
     }
 
-    public Game joinGame(@RequestParam String gameID) throws FalseInputException, EntryDoesNotExistException {
     @GetMapping(value = "/game/join")
-
+    public Game joinGame(@RequestParam String gameID) throws FalseInputException, EntryDoesNotExistException {
 
         User currentUser = getCurrentUser();
 
