@@ -51,7 +51,7 @@ public class AndroidServer implements CommandLineRunner {
 
     }
 
-    @GetMapping(value = "/getGame")
+    @RequestMapping(value = "/game", method = RequestMethod.GET)
     public Game loadGame(@RequestBody Game game) throws EntryDoesNotExistException {
         if (game.get_id() == null) {
             throw new EntryDoesNotExistException("No game specified");
