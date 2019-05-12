@@ -2,7 +2,7 @@ import React from 'react';
 
 import './index.css'
 
-function Me() {
+function History() {
   const date = '12-05-2019'
   const gameResult_1 = 8
   const gameResult_2 = -2
@@ -115,4 +115,4 @@ function Me() {
   );
 }
 
-export default Me;
+export default History;

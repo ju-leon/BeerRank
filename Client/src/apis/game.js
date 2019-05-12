@@ -10,7 +10,7 @@ export const addGame = async () => {
       '/game',
       {headers: {Authorization: "Basic aGFuczoxMjM0NTY="}}
     )
-    console.log(response.data)
+    return response.data
   } catch(error) {
     console.log(error)
   }

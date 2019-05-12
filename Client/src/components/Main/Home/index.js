@@ -4,14 +4,14 @@ import { connect } from 'react-redux'
 import Header from './Header';
 import TabNav from './TabNav'
 import Play from './Play'
-import Me from './Me'
+import History from './History'
 
 let Home = ({score}) => {
   const [tabIndex, setTabIndex] = useState(0)
 
   const content = tabIndex === 0
     ? <Play />
-    : <Me />
+    : <History />
 
   return (
     <div>

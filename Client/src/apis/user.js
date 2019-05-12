@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://192.168.172.180:8080',
+  baseURL: 'http://demo.beerrank.de:8080',
 })
 
 export const getUser = async (username) => {
