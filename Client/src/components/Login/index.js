@@ -11,12 +11,10 @@ import './Login.sass'
 let Login = ({ handleSubmit, login }) => {
   const [isLoading, setIsLoading] = useState(false)
 
-  const _handleSubmit = (values) => {
+  const _handleSubmit = async (values) => {
     setIsLoading(true)
-    setTimeout(() => {
-      login(values)
-      setIsLoading(false)
-    }, 1000)
+    await login(values)
+    setIsLoading(false)
   }
 
   return (
@@ -25,12 +23,12 @@ let Login = ({ handleSubmit, login }) => {
       <form className="ui form" onSubmit={handleSubmit(_handleSubmit)}>
         <div className="field">
           <label>Username</label>
-          <Field name="input" component="input" type="text" />
+          <Field name="username" component="input" type="text" />
         </div>
 
         <div className="field">
           <label>Password</label>
-          <Field name="pw" component="input" type="password" />
+          <Field name="password" component="input" type="password" />
         </div>
 
         <div className="submit-container">

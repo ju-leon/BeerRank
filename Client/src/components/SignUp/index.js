@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import { Link } from 'react-router-dom'
 
+import { addUser } from 'apis/user'
 import {login} from 'actions/userActions'
 
 import Logo from 'components/Main/Home/Header/Logo'
@@ -15,10 +16,13 @@ let SignUp = ({handleSubmit, login}) => {
   
   const _handleSubmit = async (values) => {
     setIsLoading(true)
-    setTimeout(() => {
-      login(values)
-      setIsLoading(false)
-    }, 1000)
+
+    await addUser(values)
+
+    const {username, password} = values
+    await login({username, password})
+
+    setIsLoading(false)
   }
   
   return (
