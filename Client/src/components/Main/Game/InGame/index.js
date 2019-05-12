@@ -3,17 +3,17 @@ import Timer from 'react-compound-timer'
 
 import './InGame.sass'
 
-export default () => {
+export default ({setState}) => {
   return (
     <div className="InGame ui container">
       <h1>
-        <Timer>
+        <Timer formatValue={(num) => num < 10 ? '0' + num : num + ''}>
           <Timer.Minutes /> : <Timer.Seconds />
         </Timer>
       </h1>
 
       <div>
-      <button className="primary button">E N D E</button>
+        <button className="primary button" onClick={() => setState('POST_GAME')}>E N D E</button>
       </div>
     </div>
   )

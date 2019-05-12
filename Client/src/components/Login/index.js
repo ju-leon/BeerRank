@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import { Link } from 'react-router-dom'
@@ -9,9 +9,14 @@ import Logo from 'components/Main/Home/Header/Logo'
 import './Login.sass'
 
 let Login = ({ handleSubmit, login }) => {
+  const [isLoading, setIsLoading] = useState(false)
 
   const _handleSubmit = (values) => {
-    login(values)
+    setIsLoading(true)
+    setTimeout(() => {
+      login(values)
+      setIsLoading(false)
+    }, 1000)
   }
 
   return (
@@ -29,7 +34,7 @@ let Login = ({ handleSubmit, login }) => {
         </div>
 
         <div className="submit-container">
-          <button className="primary">Login</button>
+          <button className={`button ${isLoading ? 'ui loading' : 'primary'}`}>Login</button>
         </div>
 
         <Link className="signup-link" to="/signup">Not signed up yet?</Link>
