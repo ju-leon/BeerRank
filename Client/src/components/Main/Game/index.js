@@ -17,7 +17,7 @@ const gameMockup = {
     {userName: "Gnarlex", rank: 1120},
     {userName: "Gnarlex", rank:  870},
   ],
-  state: IN_GAME,
+  state: PRE_GAME,
 }
 
 export default ({game = gameMockup}) => {
