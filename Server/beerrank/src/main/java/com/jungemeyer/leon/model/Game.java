@@ -4,7 +4,9 @@ import com.jungemeyer.leon.MongoDB;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Document(collection = "games")
@@ -19,8 +21,16 @@ public class Game {
     private int result;
     private GameState state;
 
+    private final Date creationDate = new Date();
+
 
     public Game(){
+        team1 = new ArrayList<String>();
+        team2 = new ArrayList<String>();
+    }
+
+    public Game(String _id){
+        this._id = _id;
         team1 = new ArrayList<String>();
         team2 = new ArrayList<String>();
     }
@@ -32,11 +42,22 @@ public class Game {
     }
 
     public List<String> getTeam1() {
-        return team1;
+        List<String> t1 = new ArrayList<String>();
+        t1.addAll(team1);
+        return t1;
     }
 
     public List<String> getTeam2() {
-        return team2;
+        List<String> t2 = new ArrayList<String>();
+        t2.addAll(team2);
+        return t2;
+    }
+
+    public List<String> getParticipatedUsernames(){
+        List<String> users = new ArrayList<String>();
+        users.addAll(team1);
+        users.addAll(team2);
+        return users;
     }
 
     public void addTeam1(String user){
@@ -75,6 +96,10 @@ public class Game {
         this.state = state;
     }
 
+    public String getCreationDate(){
+        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        return df.format(creationDate);
+    }
 
     public void calculateScore(){
         //konstante für die Eloberechnung
