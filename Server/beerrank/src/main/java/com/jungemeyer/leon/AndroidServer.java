@@ -73,16 +73,37 @@ public class AndroidServer implements CommandLineRunner {
         return game;
     }
 
+    /**
+     * creates user object with start score 1200 and saves the user in the database.
+     * password encryption
+     * @param user username != null
+     * @param response
+     * @return
+     * @throws FalseInputException
+     */
     @RequestMapping(value = "/user/add", method = RequestMethod.POST)
     public User createUser(@RequestBody User user, HttpServletResponse response) throws FalseInputException {
 
+        if(user.getPassword() == null){
+            throw new FalseInputException("user must have a password");
+        }
+
+        if(user.getUsername() == null){
+            throw new FalseInputException("user must have a username");
+        }
+
         if(MongoDB.loadUser(user.getUsername()) != null) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return null;
+            throw new FalseInputException("username is already taken");
+        }
+
+        if(userRepository.findByEmail(user.getEmail()) != null){
+            throw new FalseInputException("email is already taken");
         }
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(user.getPassword()));
+
+        user.setScore(1200);
 
         userRepository.save(user);
 
