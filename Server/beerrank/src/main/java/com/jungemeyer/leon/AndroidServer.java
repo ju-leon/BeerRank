@@ -51,6 +51,11 @@ public class AndroidServer implements CommandLineRunner {
 
     }
 
+    @GetMapping(value = "/getGame")
+    public Game loadGame(@RequestBody Game game) throws EntryDoesNotExistException {
+        if (game.get_id() == null) {
+            throw new EntryDoesNotExistException("No game specified");
+        }
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public User createUser(@RequestBody User user, HttpServletResponse response) throws FalseInputException {
@@ -69,9 +74,9 @@ public class AndroidServer implements CommandLineRunner {
     }
 
     @RequestMapping(value = "/game", method = RequestMethod.POST)
-    public Game createGame(@RequestBody Game game) throws EntryDoesNotExistException {
+    public Game createGame(@RequestBody Game game) throws FalseInputException {
         if(gameRepository.findBy_id(game.get_id()) != null){
-
+            throw new FalseInputException("Game already exists!");
         }
 
         gameRepository.save(game);
@@ -118,30 +123,62 @@ public class AndroidServer implements CommandLineRunner {
         return dbGame;
     }
 
+    public Game joinGame(@RequestParam String gameID) throws FalseInputException, EntryDoesNotExistException {
     @GetMapping(value = "/game/join")
-    public Game get(@RequestParam String gameID) throws FalseInputException {
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        System.out.println("Username: " + ((org.springframework.security.core.userdetails.User) principal).getUsername());
-        User currentUser = (User) userRepository.findByUsername(((org.springframework.security.core.userdetails.User) principal).getUsername());
+        User currentUser = getCurrentUser();
 
         if (currentUser == null) {
-            System.out.println("Fatal error!");
-            throw new FalseInputException("Error");
+            throw new EntryDoesNotExistException("Fatal error! currentUser does not exist");
         }
-
         Game dbGame = gameRepository.findBy_id(gameID);
 
         if (dbGame == null) {
             throw new FalseInputException("GameID does not exist.");
         }
 
+        if(dbGame.getTeam1().contains(currentUser.getUsername()) || dbGame.getTeam2().contains(currentUser.getUsername())){
+            throw new FalseInputException("User is already in this game");
+        }
         dbGame.addTeam1(currentUser.getUsername());
+        MongoDB.saveGame(dbGame);
 
         return dbGame;
 
         // TODO: Link to frontend Lobby
+    }
+
+
+
+    @RequestMapping(value = "/changeTeam", method = RequestMethod.PUT)
+    public Game changeTeam(@RequestBody Game game) throws EntryDoesNotExistException {
+
+        game = loadGame(game);
+
+        String currentUser = getCurrentUser().getUsername();
+
+        if(!game.getTeam1().contains(currentUser) && !game.getTeam2().contains(currentUser)){
+            throw new EntryDoesNotExistException("this player does not take part in this game");
+        }
+
+        if(game.getTeam1().contains(currentUser)){
+            game.addTeam2(currentUser);
+        }else{
+            game.addTeam1(currentUser);
+        }
+
+        MongoDB.saveGame(game);
+
+        return game;
+    }
+
+
+    private User getCurrentUser(){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+       // System.out.println("Username: " + ((org.springframework.security.core.userdetails.User) principal).getUsername());
+        return (User) userRepository.findByUsername(((org.springframework.security.core.userdetails.User) principal).getUsername());
     }
 
 

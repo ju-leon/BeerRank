@@ -21,8 +21,8 @@ public class Game {
 
 
     public Game(){
-        team1 = new ArrayList<>();
-        team2 = new ArrayList<>();
+        team1 = new ArrayList<String>();
+        team2 = new ArrayList<String>();
     }
 
     public Game(List<String> team1, List<String> team2, int result){
