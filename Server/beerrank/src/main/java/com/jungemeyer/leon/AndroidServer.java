@@ -48,13 +48,36 @@ public class AndroidServer implements CommandLineRunner {
         if (user == null) {
             throw new EntryDoesNotExistException("User does not exist");
         }
-
+        user.setPassword(null);
         return user;
     }
 
     @RequestMapping(value = "/user/login", method = RequestMethod.GET)
     public User checkLogin() {
-        return getCurrentUser();
+        User user = getCurrentUser();
+        user.setPassword(null);
+        return user;
+    }
+
+    @RequestMapping(value = "/user/change", method = RequestMethod.PUT)
+    public User changeUser(@RequestBody User user) throws EntryDoesNotExistException {
+        User dbUser = loadUser(user);
+
+        if(user.getPassword() != null){
+            dbUser.setPassword(user.getPassword());
+        }
+        if(user.getEmail() != null){
+            dbUser.setEmail(user.getEmail());
+        }
+        if(user.getFirstName() != null){
+            dbUser.setFirstName(user.getFirstName());
+        }
+        if(user.getLastName() != null){
+            dbUser.setLastName(user.getLastName());
+        }
+        userRepository.save(dbUser);
+        dbUser.setPassword(null);
+        return dbUser;
     }
 
     @RequestMapping(value = "/game", method = RequestMethod.GET)
@@ -106,6 +129,7 @@ public class AndroidServer implements CommandLineRunner {
 
         userRepository.save(user);
 
+        user.setPassword(null);
         return user;
     }
 
@@ -248,7 +272,11 @@ public class AndroidServer implements CommandLineRunner {
         users.addAll(userRepository.findAll());
         Collections.sort(users);
         int toIndex = 20 < users.size() ? 20 : users.size();
-        return users.subList(0, toIndex);
+        List<User> returnUsers = users.subList(0, toIndex);
+        for(User user: returnUsers){
+            user.setPassword(null);
+        }
+        return returnUsers;
     }
 
 

@@ -4,7 +4,9 @@ import com.jungemeyer.leon.MongoDB;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Document(collection = "games")
@@ -18,6 +20,8 @@ public class Game {
     //result gibt an um wie viele becher ein Team gewonnen hat. positiv für team1 hat gewonnen.
     private int result;
     private GameState state;
+
+    private final Date creationDate = new Date();
 
 
     public Game(){
@@ -92,6 +96,10 @@ public class Game {
         this.state = state;
     }
 
+    public String getCreationDate(){
+        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        return df.format(creationDate);
+    }
 
     public void calculateScore(){
         //konstante für die Eloberechnung
